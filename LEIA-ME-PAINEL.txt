@@ -1,0 +1,150 @@
+=====================================================================
+ LISTA DE CONFIRMADOS — como ligar o convite à sua planilha
+=====================================================================
+
+Hoje a confirmação já chega no WhatsApp da Karoline. O problema do
+WhatsApp é que a lista se perde no meio das conversas. Com o passo a
+passo abaixo, cada confirmação também cai numa planilha do Google e
+aparece organizada no arquivo painel.html.
+
+São 5 minutos, uma vez só. Tudo de graça.
+
+---------------------------------------------------------------------
+PASSO 1 — Criar a planilha
+---------------------------------------------------------------------
+1. Abra sheets.new (cria uma planilha nova no Google)
+2. Dê um nome, ex: "Confirmações 18 anos Karoline"
+
+---------------------------------------------------------------------
+PASSO 2 — Colar o código
+---------------------------------------------------------------------
+1. Na planilha, menu:  Extensões > Apps Script
+2. Apague tudo que estiver lá
+3. Cole o código que está no fim deste arquivo
+4. Na primeira linha, troque a senha:
+       const SENHA = 'karoline18';
+   por uma senha sua. É ela que você vai digitar no painel.
+5. Salve (ícone do disquete)
+
+---------------------------------------------------------------------
+PASSO 3 — Publicar
+---------------------------------------------------------------------
+1. Botão azul "Implantar" > "Nova implantação"
+2. No engrenagem do lado de "Selecionar tipo", escolha "App da Web"
+3. Preencha:
+       Executar como .......... Eu (seu e-mail)
+       Quem pode acessar ...... Qualquer pessoa
+   ATENÇÃO: tem que ser "Qualquer pessoa", senão o convite não
+   consegue gravar. Não é "Qualquer pessoa com conta do Google".
+4. Clique em "Implantar"
+5. O Google vai pedir autorização: Revisar permissões > escolha sua
+   conta > "Avançado" > "Acessar (nome do projeto)" > "Permitir"
+6. Copie o link que aparece. Ele termina em  /exec
+
+---------------------------------------------------------------------
+PASSO 4 — Colar o link no convite
+---------------------------------------------------------------------
+Abra o index.html e procure por  urlPlanilha  (está lá no começo do
+<script>, dentro do CFG). Cole o link entre as aspas:
+
+    urlPlanilha: 'https://script.google.com/macros/s/AKfy..../exec'
+
+Salve e suba o site de novo no Netlify.
+
+---------------------------------------------------------------------
+PASSO 5 — Abrir o painel
+---------------------------------------------------------------------
+Abra o painel.html (ele também vai junto no Netlify:
+seusite.netlify.app/painel.html).
+
+Na primeira vez ele pede o link do Apps Script e a senha. Depois
+disso ele já abre direto — fica salvo no aparelho.
+
+No painel você vê:
+  - quantas pessoas confirmaram
+  - quantos acompanhantes e quantas crianças
+  - o total de pessoas na festa
+  - a lista com o nome de cada um
+  - busca por nome
+  - botão de exportar CSV (abre no Excel)
+
+O link do painel é só seu. Não mande junto com o convite.
+
+=====================================================================
+ CÓDIGO PARA COLAR NO APPS SCRIPT
+=====================================================================
+
+const SENHA = 'karoline18';
+const ABA = 'Confirmações';
+
+function pegarAba_() {
+  const arq = SpreadsheetApp.getActiveSpreadsheet();
+  let aba = arq.getSheetByName(ABA);
+  if (!aba) {
+    aba = arq.insertSheet(ABA);
+  }
+  if (aba.getLastRow() === 0) {
+    aba.appendRow(['Data', 'Nome', 'Acompanhante', 'Crianças', 'Total', 'Tipo']);
+    aba.getRange(1, 1, 1, 6).setFontWeight('bold');
+    aba.setFrozenRows(1);
+  }
+  return aba;
+}
+
+function doPost(e) {
+  try {
+    const d = JSON.parse(e.postData.contents);
+    pegarAba_().appendRow([
+      new Date(),
+      d.nome || '',
+      d.acompanhante || '',
+      d.criancas || '',
+      d.total || 1,
+      d.tipo || ''
+    ]);
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ erro: String(err) }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  if ((e.parameter.senha || '') !== SENHA) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ erro: 'senha' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  const aba = pegarAba_();
+  const lista = [];
+  if (aba.getLastRow() > 1) {
+    aba.getRange(2, 1, aba.getLastRow() - 1, 6).getValues().forEach(function (r) {
+      if (!r[1] && !r[2]) return;
+      lista.push({
+        data: r[0],
+        nome: r[1],
+        acompanhante: r[2],
+        criancas: r[3],
+        total: r[4],
+        tipo: r[5]
+      });
+    });
+  }
+  return ContentService
+    .createTextOutput(JSON.stringify({ lista: lista }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+=====================================================================
+ SE PRECISAR MEXER DEPOIS
+=====================================================================
+
+Toda vez que você alterar o código do Apps Script, precisa publicar de
+novo: Implantar > Gerenciar implantações > lápis (editar) > em Versão
+escolha "Nova versão" > Implantar. O link continua o mesmo.
+
+Enquanto o campo urlPlanilha ficar vazio no index.html, o convite
+funciona normalmente — só não grava na planilha.

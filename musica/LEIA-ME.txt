@@ -1,0 +1,45 @@
+MÚSICAS DO CONVITE — uma para cada tela
+=======================================
+
+Coloque TODOS os arquivos aqui nesta pasta "musica/", com estes nomes exatos
+(tudo minúsculo, sem acento, terminando em .mp3):
+
+    entrada.mp3      -> tela de abertura ("Toque para abrir")
+    principal.mp3    -> tela principal (a do "18" e da contagem)
+    fotos.mp3        -> Momentos (a galeria de fotos)
+    presentes.mp3    -> Presentes
+    pix.mp3          -> Pix
+    local.mp3        -> Local
+    traje.mp3        -> Traje
+    recado.mp3       -> Recadinho
+    confirmar.mp3    -> Confirmar Presença
+
+COMO FUNCIONA
+  - Quando o convidado muda de tela, a música troca sozinha, com uma
+    transição suave de menos de 1 segundo (uma abaixa enquanto a outra sobe).
+  - Cada música fica em repetição enquanto aquela tela estiver aberta.
+  - No vídeo da carta, a música abaixa sozinha e volta quando o vídeo termina.
+  - O botão ♪ no canto liga e desliga o som do convite inteiro.
+
+NÃO PRECISA COLOCAR TODAS
+  Se faltar algum arquivo, aquela tela simplesmente continua com a música
+  que já estava tocando. Nada quebra, nada trava.
+  Dá pra começar com entrada.mp3, principal.mp3 e fotos.mp3 e ir somando.
+
+DICA DE TAMANHO
+  Cada arquivo com no máximo 2 a 3 MB (o convite inteiro fica leve e abre
+  rápido no 4G). Um trecho de 1 a 2 minutos já basta, porque fica em loop.
+
+QUER USAR OUTRO NOME OU OUTRO FORMATO (.m4a)?
+  Abra o index.html, procure por "musicas:" (logo no começo do <script>)
+  e troque o caminho do arquivo. Exemplo:
+      'm-pix':  'musica/pix.mp3',      ->   'm-pix':  'musica/minha-musica.m4a',
+
+MÚSICA DE ENTRADA — ATENÇÃO
+  O celular só libera som depois do primeiro toque na tela. Por isso, a
+  entrada.mp3 começa no momento em que o convidado toca em "Toque para abrir"
+  e logo em seguida entra a principal.mp3.
+  Se quiser que a de entrada toque alguns segundos antes de virar a
+  principal, abra o index.html e mude:
+      segurarEntrada: 0,      ->     segurarEntrada: 6000,
+  (6000 = 6 segundos)

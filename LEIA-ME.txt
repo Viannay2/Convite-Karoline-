@@ -1,0 +1,141 @@
+CONVITE 18 ANOS — KAROLINE  •  versão 8 "Purple Light"
+=======================================================
+
+ARQUIVOS
+  index.html          -> o convite inteiro (um arquivo só)
+  painel.html         -> SEU painel com a lista de confirmados
+  LEIA-ME-PAINEL.txt  -> passo a passo pra ligar a lista na planilha
+  fotos/              -> 01.jpg até 19.jpg, na ordem cronológica
+  qr/pix.jpg          -> QR code do Pix
+  preview.jpg         -> imagem que aparece na prévia do link no WhatsApp
+  musica/             -> uma musica para cada tela (veja musica/LEIA-ME.txt)
+
+COMO PUBLICAR
+  1. Entre em app.netlify.com/drop
+  2. Arraste a pasta "convite-karoline" inteira
+  3. O convite fica em  seusite.netlify.app
+     O painel fica em   seusite.netlify.app/painel.html
+
+  O link do painel é só seu — não mande junto com o convite.
+
+ONDE MUDAR OS DADOS
+  No index.html, procure por "const CFG" (começo do <script>).
+  Lá ficam data, telefone, chave Pix, endereço e o link da planilha.
+
+O QUE MUDOU NESTA VERSÃO (v8)
+
+  1. BUG DOS BOTÕES — CORRIGIDO
+     Depois de abrir e fechar a galeria de fotos, os botões da tela
+     principal paravam de funcionar (só o botão da música respondia).
+     Causa: em CSS, um "visibility:visible" num elemento filho VENCE o
+     "visibility:hidden" do pai. A foto ativa da galeria ficava assim,
+     e a galeria já fechada continuava invisível NA FRENTE dos botões,
+     engolindo os toques. Agora o "visible" só vale com a galeria
+     aberta, e toda tela fechada recebe "pointer-events:none" como
+     trava de segurança.
+
+  2. ABERTURA DE 13 SEGUNDOS
+     Depois do "Toque para abrir" entra uma introdução com 5 frases,
+     a música de entrada tocando e uma barrinha mostrando quanto falta.
+     Tem botão "Pular" para quem não quiser esperar.
+     - Mudar as frases: no index.html, procure por 'class="fala'
+     - Mudar a duração: no CFG, procure por "duracaoAbertura"
+       (13000 = 13 segundos). Se mudar muito, ajuste também os tempos
+       no CSS, em "#abertura.ativa .f1"
+
+  3. TELA PRINCIPAL
+     - O endereço desceu para DEPOIS do "Confirmar Presença", então o
+       botão de confirmar agora aparece sem precisar rolar a tela.
+       Testado em celular pequeno (360x640), médio e grande.
+     - Versículos e frases mais claros e mais NÍTIDOS: o que deixava o
+       texto "borrado" era um brilho roxo largo em volta das letras.
+       Troquei por uma sombra escura curtinha + brilho discreto.
+
+  4. TEXTOS
+     - Presentes: agora abre com "O maior presente é a sua presença"
+     - Pix: "Você também pode me presentear com um Pix, se preferir!",
+       deixando claro que não é obrigatório
+     - Traje: saiu "passeio completo" (que quase ninguém entende).
+       Agora explica em português claro, com sugestão para elas e eles
+
+  5. VÍDEO REMOVIDO da galeria (e do pacote: -3,5 MB)
+
+  6. RODAPÉ sem o telefone. Agora é só "Armindo Web", e tocar no nome
+     abre o WhatsApp com a mensagem pronta.
+
+  7. MAIS LEVE AINDA: menos estrelas (46 -> 24), a abertura some de vez
+     depois que termina, e a barrinha usa transform em vez de largura.
+        tela de abertura   ~59 fps
+        tela principal     ~50 fps
+        telas (Pix…)       ~59 fps
+        galeria            ~57 fps
+
+O QUE MUDOU NA v7
+
+  1. VELOCIDADE — o convite estava travando. Medido num celular mediano:
+        tela de abertura      8 fps  ->  58 fps
+        tela principal        7 fps  ->  53 fps
+        telas (Pix, Local…)   7 fps  ->  59 fps
+        galeria de fotos      5 fps  ->  57 fps
+     O que foi feito:
+       - o glitter agora usa figurinhas prontas em vez de criar um
+         degradê novo para cada bolinha, 60 vezes por segundo
+       - o glitter para sozinho quando tem tela aberta por cima ou
+         quando o convidado sai do navegador
+       - os globos de espelho tinham 800 quadradinhos piscando ao mesmo
+         tempo; agora são bem menos, e no celular ficam 3 globos (os de
+         cima), porque os de baixo só apareciam pela metade
+       - a galeria baixava as 19 fotos DUAS vezes assim que abria
+         (~4 MB de uma vez); agora baixa de duas em duas
+       - saíram os efeitos de vidro fosco que ninguém via, mas que
+         obrigavam o celular a reborrar a tela a cada quadro
+
+  2. PRÉVIA DO LINK no WhatsApp arrumada (veja a seção abaixo)
+
+  3. MÚSICAS recomprimidas: 6,6 MB -> 5,4 MB, sem diferença no celular
+
+PRÉVIA DO LINK (WhatsApp / Facebook)
+  O endereço estava errado: apontava para
+      https://viannay2.github.io/convite-karoline/
+  quando o certo, pelo nome do seu repositório, é
+      https://viannay2.github.io/Convite-Karoline-/
+  (o GitHub diferencia maiúscula de minúscula — e tem o traço no fim)
+
+  A imagem da prévia agora é o arquivo preview.jpg, que vai junto no
+  seu repositório. Antes ela ficava hospedada no postimg, num site de
+  terceiros que pode sair do ar.
+
+  IMPORTANTE: o WhatsApp guarda a prévia antiga por vários dias.
+  Depois de publicar, entre em developers.facebook.com/tools/debug,
+  cole o link e clique em "Scrape Again" para forçar a atualização.
+
+O QUE MUDOU NA v6
+  - UMA MÚSICA PARA CADA TELA: entrada, principal, fotos, presentes, pix,
+    local, traje, recadinho e confirmar. Os arquivos vão todos na pasta
+    "musica/" com nomes diferentes — a lista está em musica/LEIA-ME.txt
+  - A troca entre as músicas é suave (uma abaixa enquanto a outra sobe)
+  - No vídeo da carta a música abaixa sozinha e volta depois
+  - Se faltar o arquivo de alguma tela, a música anterior continua tocando
+  - RODAPÉ com "Desenvolvido por Armindo Web" e o telefone (21) 97320-7665
+    no fim da tela principal — o número abre o WhatsApp com mensagem pronta.
+    Para mudar nome, telefone ou mensagem: procure "dev:" no index.html
+
+VERSÃO ANTERIOR (v5)
+  - Versículo "Até aqui nos ajudou o Senhor" (1 Samuel 7:12) na abertura
+    e na tela principal, com "Toda honra e glória ao Senhor Jesus"
+  - Todos os textos aumentados: recadinho, presentes, Pix, endereço
+  - Seis transições diferentes alternando entre as fotos
+    (zoom, entrada pela direita, giro 3D, entrada pela esquerda,
+     revelação com desfoque e subida) — cada foto entra de um jeito
+  - Pix com mensagem carinhosa em vez do card seco
+  - LISTA DE CONFIRMADOS: cada confirmação também vai pra uma planilha
+    e aparece no painel.html com nome, acompanhante, crianças e totais
+  - Na confirmação rápida agora pede o nome (pra entrar na lista)
+
+VERSÃO ANTERIOR (v4)
+  - Saíram as barras prateadas laterais
+  - Globos de espelho em SVG com facetas que giram e cintilam
+  - Feixes de luz + glitter em canvas + estrelas
+  - "18" nítido, fotos emolduradas sem cortar
+  - Galeria estilo stories, salvar na agenda, compartilhar, confete
+  - Fontes embutidas no arquivo (não depende do Google)

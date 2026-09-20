@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#05000c">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel · Confirmações — 18 Anos da Karoline</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --preto:#05000c;
+  --roxo:#8b1fd8;
+  --roxo-neon:#b537f2;
+  --roxo-claro:#d59bff;
+  --lavanda:#eed4ff;
+  --vidro:rgba(28,6,48,.6);
+  --borda:rgba(213,155,255,.26);
+  --verde:#4ade80;
+}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(60% 40% at 15% 0%, rgba(139,31,216,.30) 0%, transparent 65%),
+    radial-gradient(55% 40% at 85% 8%, rgba(181,55,242,.22) 0%, transparent 68%),
+    linear-gradient(180deg,#0a0118 0%,#05000c 60%,#05000c 100%);
+  background-attachment:fixed;
+  color:#fff;
+  font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  padding:24px 16px calc(env(safe-area-inset-bottom) + 40px);
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:820px;margin:0 auto}
+
+header{text-align:center;margin-bottom:26px}
+header h1{
+  font-size:clamp(22px,5.5vw,30px);font-weight:700;letter-spacing:.02em;
+  background:linear-gradient(180deg,#fff,#d59bff);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+header p{margin-top:6px;font-size:14px;color:var(--roxo-claro);letter-spacing:.06em}
+
+/* ---- cartões de total ---- */
+.totais{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.total{
+  background:var(--vidro);border:1px solid var(--borda);border-radius:16px;
+  padding:14px 8px;text-align:center;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.total b{display:block;font-size:clamp(22px,6vw,30px);line-height:1;color:#fff}
+.total span{display:block;margin-top:6px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--roxo-claro)}
+.total.destaque{background:linear-gradient(135deg,rgba(139,31,216,.85),rgba(181,55,242,.7));border-color:rgba(255,255,255,.38)}
+.total.destaque span{color:#fff}
+@media (max-width:560px){.totais{grid-template-columns:repeat(2,1fr)}}
+
+/* ---- barra de ações ---- */
+.acoes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap}
+.acoes input[type=search]{
+  flex:1;min-width:180px;padding:13px 16px;border-radius:12px;
+  background:rgba(255,255,255,.07);border:1px solid var(--borda);
+  color:#fff;font-size:15px;font-family:inherit;outline:none;
+}
+.acoes input[type=search]::placeholder{color:rgba(255,255,255,.4)}
+.acoes input[type=search]:focus{border-color:var(--roxo-neon)}
+button{
+  padding:13px 18px;border:none;border-radius:12px;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:600;color:#fff;
+  background:linear-gradient(135deg,#8b1fd8,#b537f2);
+  box-shadow:0 6px 18px rgba(139,31,216,.45);
+}
+button.secundario{background:var(--vidro);border:1px solid var(--borda);box-shadow:none;color:var(--lavanda)}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.5;cursor:default}
+
+/* ---- lista ---- */
+.lista{display:flex;flex-direction:column;gap:10px}
+.cartao{
+  background:var(--vidro);border:1px solid var(--borda);border-radius:16px;
+  padding:16px 17px;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.cartao .topo{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.cartao .nome{font-size:17px;font-weight:600;color:#fff;line-height:1.3}
+.cartao .quando{font-size:11.5px;color:rgba(255,255,255,.45);white-space:nowrap;padding-top:3px}
+.cartao .detalhes{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.linha{display:flex;gap:9px;align-items:baseline;font-size:14.5px;color:rgba(255,255,255,.85)}
+.linha em{
+  font-style:normal;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--roxo-claro);min-width:96px;
+}
+.selo{
+  display:inline-block;margin-top:11px;padding:5px 11px;border-radius:999px;
+  background:rgba(74,222,128,.14);border:1px solid rgba(74,222,128,.4);
+  color:var(--verde);font-size:11.5px;font-weight:600;letter-spacing:.04em;
+}
+.vazio{
+  text-align:center;padding:48px 20px;color:rgba(255,255,255,.55);
+  background:var(--vidro);border:1px dashed var(--borda);border-radius:18px;font-size:15px;line-height:1.7;
+}
+
+/* ---- tela de configuração ---- */
+.config{
+  background:var(--vidro);border:1px solid var(--borda);border-radius:18px;padding:24px 20px;
+}
+.config h2{font-size:18px;margin-bottom:8px}
+.config p{font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.78);margin-bottom:16px}
+.config input{
+  width:100%;padding:13px 15px;border-radius:12px;margin-bottom:11px;
+  background:rgba(255,255,255,.07);border:1px solid var(--borda);
+  color:#fff;font-size:15px;font-family:inherit;outline:none;
+}
+.config input:focus{border-color:var(--roxo-neon)}
+.config label{display:block;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--roxo-claro);margin-bottom:6px}
+.erro{margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(255,107,157,.12);border:1px solid rgba(255,107,157,.4);color:#ffb3cd;font-size:14px;line-height:1.6}
+.rodape{margin-top:26px;text-align:center;font-size:12.5px;color:rgba(255,255,255,.35)}
+.rodape a{color:var(--roxo-claro);cursor:pointer;text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Confirmações</h1>
+    <p>18 Anos da Karoline · 18/12/2026</p>
+  </header>
+
+  <!-- tela de configuração (primeira vez) -->
+  <div class="config" id="config" style="display:none">
+    <h2>Conectar à planilha</h2>
+    <p>
+      Cole aqui o link do seu Apps Script (aquele que termina em <strong>/exec</strong>)
+      e a senha que você definiu nele. Fica salvo só neste aparelho.
+      O passo a passo está no arquivo <strong>LEIA-ME-PAINEL.txt</strong>.
+    </p>
+    <label>Link do Apps Script</label>
+    <input type="url" id="inUrl" placeholder="https://script.google.com/macros/s/.../exec">
+    <label>Senha</label>
+    <input type="password" id="inSenha" placeholder="a senha que você definiu">
+    <button onclick="salvarConfig()" style="width:100%;margin-top:6px">Conectar</button>
+    <div class="erro" id="erroConfig" style="display:none"></div>
+  </div>
+
+  <!-- painel -->
+  <div id="painel" style="display:none">
+    <div class="totais">
+      <div class="total"><b id="tConf">0</b><span>Confirmações</span></div>
+      <div class="total"><b id="tAcomp">0</b><span>Acompanhantes</span></div>
+      <div class="total"><b id="tCri">0</b><span>Crianças</span></div>
+      <div class="total destaque"><b id="tPessoas">0</b><span>Total de pessoas</span></div>
+    </div>
+
+    <div class="acoes">
+      <input type="search" id="busca" placeholder="Buscar por nome…" oninput="render()">
+      <button class="secundario" onclick="carregar()" id="btnAtualizar">Atualizar</button>
+      <button class="secundario" onclick="exportarCSV()">Exportar CSV</button>
+    </div>
+
+    <div class="lista" id="lista"></div>
+    <div class="rodape">
+      Atualizado <span id="quando">agora</span> ·
+      <a onclick="trocarConfig()">trocar planilha</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CHAVE = 'painel-karoline-18';
+let CONF = null;
+let DADOS = [];
+
+/* ---------- configuração ---------- */
+function lerConfig(){
+  try { return JSON.parse(localStorage.getItem(CHAVE) || 'null'); }
+  catch { return null; }
+}
+function salvarConfig(){
+  const url = document.getElementById('inUrl').value.trim();
+  const senha = document.getElementById('inSenha').value.trim();
+  const erro = document.getElementById('erroConfig');
+  if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(url)){
+    erro.style.display = 'block';
+    erro.textContent = 'O link precisa ser o do Apps Script publicado e terminar em /exec.';
+    return;
+  }
+  CONF = { url, senha };
+  localStorage.setItem(CHAVE, JSON.stringify(CONF));
+  erro.style.display = 'none';
+  mostrarPainel();
+  carregar();
+}
+function trocarConfig(){
+  localStorage.removeItem(CHAVE);
+  location.reload();
+}
+function mostrarPainel(){
+  document.getElementById('config').style.display = 'none';
+  document.getElementById('painel').style.display = 'block';
+}
+
+/* ---------- carregar dados ---------- */
+async function carregar(){
+  const btn = document.getElementById('btnAtualizar');
+  btn.disabled = true; btn.textContent = 'Carregando…';
+  try {
+    const r = await fetch(CONF.url + '?senha=' + encodeURIComponent(CONF.senha), { cache: 'no-store' });
+    const j = await r.json();
+    if (j.erro === 'senha') throw new Error('Senha incorreta. Clique em "trocar planilha" para corrigir.');
+    DADOS = (j.lista || []).slice().reverse();
+    document.getElementById('quando').textContent =
+      new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    render();
+  } catch (e){
+    document.getElementById('lista').innerHTML =
+      '<div class="vazio">Não consegui ler a planilha.<br><br>' +
+      (e.message || 'Confira se o Apps Script foi publicado com acesso para "Qualquer pessoa".') +
+      '</div>';
+  }
+  btn.disabled = false; btn.textContent = 'Atualizar';
+}
+
+/* ---------- render ---------- */
+function contarCriancas(txt){
+  if (!txt) return 0;
+  return String(txt).split('·').filter(p => p.trim()).length;
+}
+
+function render(){
+  const termo = document.getElementById('busca').value.trim().toLowerCase();
+  const filtrados = DADOS.filter(d =>
+    !termo ||
+    String(d.nome || '').toLowerCase().includes(termo) ||
+    String(d.acompanhante || '').toLowerCase().includes(termo) ||
+    String(d.criancas || '').toLowerCase().includes(termo)
+  );
+
+  let conf = 0, acomp = 0, cri = 0;
+  DADOS.forEach(d => {
+    conf++;
+    if (String(d.acompanhante || '').trim()) acomp++;
+    cri += contarCriancas(d.criancas);
+  });
+  document.getElementById('tConf').textContent = conf;
+  document.getElementById('tAcomp').textContent = acomp;
+  document.getElementById('tCri').textContent = cri;
+  document.getElementById('tPessoas').textContent = conf + acomp + cri;
+
+  const lista = document.getElementById('lista');
+  if (!filtrados.length){
+    lista.innerHTML = '<div class="vazio">' +
+      (DADOS.length ? 'Nenhum convidado com esse nome.' :
+       'Ninguém confirmou ainda.<br>Assim que o primeiro convidado confirmar, ele aparece aqui.') +
+      '</div>';
+    return;
+  }
+
+  lista.innerHTML = filtrados.map(d => {
+    const acompanhante = String(d.acompanhante || '').trim();
+    const criancas = String(d.criancas || '').trim();
+    const nCri = contarCriancas(criancas);
+    const pessoas = 1 + (acompanhante ? 1 : 0) + nCri;
+    let data = '';
+    try {
+      data = new Date(d.data).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    } catch { data = ''; }
+
+    let detalhes = '';
+    if (acompanhante) detalhes += `<div class="linha"><em>Acompanhante</em><span>${esc(acompanhante)}</span></div>`;
+    if (criancas)     detalhes += `<div class="linha"><em>Crianças (${nCri})</em><span>${esc(criancas)}</span></div>`;
+
+    return `<div class="cartao">
+      <div class="topo">
+        <div class="nome">${esc(d.nome || '(sem nome)')}</div>
+        <div class="quando">${data}</div>
+      </div>
+      ${detalhes ? `<div class="detalhes">${detalhes}</div>` : ''}
+      <div class="selo">${pessoas} ${pessoas === 1 ? 'pessoa' : 'pessoas'}</div>
+    </div>`;
+  }).join('');
+}
+
+function esc(t){
+  return String(t).replace(/[&<>"']/g, c =>
+    ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+/* ---------- exportar ---------- */
+function exportarCSV(){
+  const linhas = [['Nome','Acompanhante','Criancas','Total de pessoas','Data']];
+  DADOS.forEach(d => {
+    const acompanhante = String(d.acompanhante || '').trim();
+    const criancas = String(d.criancas || '').trim();
+    const pessoas = 1 + (acompanhante ? 1 : 0) + contarCriancas(criancas);
+    let data = '';
+    try { data = new Date(d.data).toLocaleString('pt-BR'); } catch {}
+    linhas.push([d.nome || '', acompanhante, criancas, pessoas, data]);
+  });
+  const csv = '﻿' + linhas
+    .map(l => l.map(c => `"${String(c).replace(/"/g,'""')}"`).join(';'))
+    .join('\r\n');
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url; a.download = 'confirmados-karoline-18-anos.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+/* ---------- início ---------- */
+CONF = lerConfig();
+if (CONF && CONF.url){
+  mostrarPainel();
+  carregar();
+} else {
+  document.getElementById('config').style.display = 'block';
+}
+</script>
+</body>
+</html>
