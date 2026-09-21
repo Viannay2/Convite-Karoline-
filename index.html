@@ -725,19 +725,16 @@ body.modal-aberto .cintila{
   color:rgba(255,255,255,.85) !important;
 }
 
-/* traje */
-.cores{display:flex;gap:14px;justify-content:center;margin:16px 0 8px}
-.cores span{width:42px;height:42px;border-radius:50%;box-shadow:0 0 16px rgba(181,55,242,.55), 0 0 0 1px rgba(255,255,255,.28) inset}
-.c-roxo{background:linear-gradient(135deg,#6d17ad,#b537f2)}
-.c-prata{background:linear-gradient(135deg,#8e8e9a,#f2f2f7 45%,#a8a8b4)}
-.c-preto{background:linear-gradient(135deg,#0b0b12,#2b2b38)}
+/* jogo — a janela ocupa a tela toda, abaixo do botão Voltar */
+#m-jogo{padding:calc(env(safe-area-inset-top) + 76px) 0 0;overflow:hidden;background:#0b0614;-webkit-backdrop-filter:none;backdrop-filter:none}
+#frameJogo{display:block;width:100%;flex:1;min-height:0;border:0;background:#0b0614}
 .painel p{font-size:clamp(25px,5vw,30px);line-height:1.7;color:rgba(255,255,255,.96);font-weight:400;text-shadow:0 1px 4px rgba(5,0,12,.8)}
 .painel p strong{color:var(--lavanda);font-weight:600}
 .painel h3{font-family:'Cinzel',serif;font-size:clamp(19px,5.2vw,23px);letter-spacing:.1em;color:#fff;margin-bottom:10px}
 .icone-grande{font-size:42px;filter:drop-shadow(0 0 12px rgba(213,155,255,.85));margin-bottom:10px}
 
 /* recado */
-.recado{line-height:1.75;color:rgba(255,255,255,.94);font-style:italic;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,6vw,25px)}
+.painel p.recado{line-height:1.75;color:rgba(255,255,255,.94);font-style:italic;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(26px,7vw,32px)}
 .assina{font-family:'Great Vibes',cursive;font-size:clamp(40px,11vw,52px);color:var(--branco-quente);margin-top:14px;text-shadow:0 0 10px #fff,0 0 26px rgba(181,55,242,.85)}
 
 /* formulário */
@@ -1039,7 +1036,7 @@ body.modal-aberto .btn-musica{opacity:0;visibility:hidden;pointer-events:none}
       <button class="card-btn" onclick="abrir('m-presentes')"><span class="ic">🎁</span><span class="tx">Presentes</span></button>
       <button class="card-btn" onclick="abrir('m-pix')"><span class="ic">💜</span><span class="tx">Pix</span></button>
       <button class="card-btn" onclick="abrir('m-local')"><span class="ic">📍</span><span class="tx">Local</span></button>
-      <button class="card-btn" onclick="abrir('m-traje')"><span class="ic">👗</span><span class="tx">Traje</span></button>
+      <button class="card-btn" onclick="abrirJogo()"><span class="ic">🎮</span><span class="tx">Jogo</span></button>
       <button class="card-btn" onclick="abrir('m-recado')"><span class="ic">💌</span><span class="tx">Recadinho</span></button>
       <button class="card-btn destaque" onclick="abrir('m-rsvp')"><span class="ic">✨</span><span class="tx">Confirmar Presença</span></button>
     </div>
@@ -1166,34 +1163,13 @@ body.modal-aberto .btn-musica{opacity:0;visibility:hidden;pointer-events:none}
   </div>
 </div>
 
-<!-- ============ TRAJE ============ -->
-<div class="modal" id="m-traje">
+<!-- ============ JOGO (abre o jogo.html aqui dentro) ============ -->
+<div class="modal" id="m-jogo">
   <div class="modal-topo">
-    <button class="voltar-top" onclick="fechar('m-traje')">‹ Voltar</button>
-    <button class="fechar-top" onclick="fechar('m-traje')">×</button>
+    <button class="voltar-top" onclick="fecharJogo()">‹ Voltar</button>
+    <button class="fechar-top" onclick="fecharJogo()">×</button>
   </div>
-  <div class="modal-titulo">Traje</div>
-  <div class="modal-sub">Sugestão da paleta de roupas 💜</div>
-
-  <div class="painel">
-    <div class="icone-grande">✨</div>
-    <h3>Sugestão cores das roupas</h3>
-    <p>
-      
-    </p>
-  </div>
-
-  
-
-  <div class="painel">
-    <div class="rotulo">As cores da noite</div>
-    <div class="cores"><span class="c-roxo"></span><span class="c-prata"></span><span class="c-preto"></span></div>
-    <p style="font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--roxo-claro);margin-top:6px">Roxo · Prata · Preto</p>
-    <p style="margin-top:16px">
-      Mas venha do jeito que você se sentir bem. O que importa mesmo
-      é <strong>você estar lá</strong>.
-    </p>
-  </div>
+  <iframe id="frameJogo" title="Jogo: Ajude a Karoline a chegar aos 18"></iframe>
 </div>
 
 <!-- ============ RECADINHO ============ -->
@@ -1305,7 +1281,7 @@ const CFG = {
     'm-presentes': 'musica/presentes.mp3',    // Presentes
     'm-pix':       'musica/pix.mp3',          // Pix
     'm-local':     'musica/local.mp3',        // Local
-    'm-traje':     'musica/traje.mp3',        // Traje
+    'm-jogo':      'musica/jogo.mp3',         // Jogo
     'm-recado':    'musica/recado.mp3',       // Recadinho
     'm-rsvp':      'musica/confirmar.mp3'     // Confirmar presença
   },
@@ -1618,8 +1594,24 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   const aberto = document.querySelector('.modal.ativa');
   if (!aberto) return;
-  aberto.id === 'galeria' ? fecharGaleria() : fechar(aberto.id);
+  if (aberto.id === 'galeria') fecharGaleria();
+  else if (aberto.id === 'm-jogo') fecharJogo();
+  else fechar(aberto.id);
 });
+
+/* ============================================================
+   JOGO — abre o jogo.html dentro do convite.
+   Ao fechar, a janela é esvaziada: o jogo para de rodar e
+   não gasta bateria escondido.
+============================================================ */
+function abrirJogo(){
+  $('frameJogo').src = 'jogo.html';
+  abrir('m-jogo');
+}
+function fecharJogo(){
+  fechar('m-jogo');
+  setTimeout(() => { $('frameJogo').src = 'about:blank'; }, 400);
+}
 
 /* ============================================================
    GALERIA — stories + Ken Burns + vídeo final
@@ -2129,4 +2121,3 @@ document.addEventListener('touchmove', e => {
 
 </body>
 </html>
- <!-- sem mais -->
