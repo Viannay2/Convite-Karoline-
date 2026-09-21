@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ranking da Karoline</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0b0614; color: #eeeafe; font-family: system-ui, sans-serif; min-height: 100vh; padding: 24px 16px; }
+  .caixa { max-width: 520px; margin: 0 auto; text-align: center; }
+  h1 { font-size: 28px; color: #d8b4fe; text-shadow: 0 0 14px #a855f7; }
+  .sub { color: #c4b5fd; margin: 6px 0 24px; font-size: 15px; }
+
+  /* PODIO: 2o, 1o, 3o lado a lado */
+  .podio { display: flex; align-items: flex-end; justify-content: center; gap: 10px; margin-bottom: 28px; }
+  .lugar { flex: 1; max-width: 150px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .lugar svg { width: 56px; height: 56px; }
+  .lugar.p1 svg { width: 76px; height: 76px; }
+  .lugar .nome { font-weight: 700; font-size: 16px; word-break: break-word; }
+  .lugar .pts { font-size: 14px; color: #c4b5fd; }
+  .degrau { width: 100%; border-radius: 10px 10px 0 0; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 800; color: #0b0614; }
+  .p1 .degrau { height: 110px; background: #fcd34d; box-shadow: 0 0 20px #fbbf24; }
+  .p2 .degrau { height: 80px;  background: #e5e7eb; box-shadow: 0 0 14px #cbd5e1; }
+  .p3 .degrau { height: 60px;  background: #fdba74; box-shadow: 0 0 14px #fb923c; }
+
+  /* 4o ao 10o */
+  ol { list-style: none; text-align: left; }
+  li { display: flex; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #2a1850; font-size: 17px; }
+  li span:first-child { color: #c4b5fd; }
+  .vazio { color: #c4b5fd; padding: 30px 0; }
+  .rodape { margin-top: 24px; font-size: 13px; color: #8b7bb5; }
+  .rodape a { color: #c4b5fd; }
+  .btn { display: inline-block; margin-top: 20px; padding: 14px 28px; border-radius: 999px; background: #a855f7; color: #fff; font-weight: 700; text-decoration: none; box-shadow: 0 0 16px #a855f7; }
+</style>
+</head>
+<body>
+<div class="caixa">
+  <h1>Ranking dos 18 da Karoline</h1>
+  <p class="sub">Os 3 primeiros ganham um brinde na festa</p>
+
+  <div class="podio" id="podio"></div>
+  <ol id="lista"></ol>
+
+  <a class="btn" href="jogo.html">Jogar agora</a>
+  <p class="rodape">Atualiza sozinho a cada 10 segundos · <a href="index.html">Voltar ao convite</a></p>
+</div>
+
+<script>
+// Mesmo endereco que esta no jogo.html:
+const FIREBASE_URL = 'https://karoline18-61ec0-default-rtdb.firebaseio.com';
+
+// desenho do trofeu (a cor muda para ouro, prata e bronze)
+function trofeu(cor) {
+  return `<svg viewBox="0 0 64 64" aria-hidden="true">
+    <path d="M20 8h24v14a12 12 0 0 1-24 0z" fill="${cor}"/>
+    <path d="M20 12h-8a8 8 0 0 0 8 12M44 12h8a8 8 0 0 1-8 12" fill="none" stroke="${cor}" stroke-width="4"/>
+    <rect x="29" y="34" width="6" height="10" fill="${cor}"/>
+    <rect x="20" y="44" width="24" height="8" rx="2" fill="${cor}"/>
+  </svg>`;
+}
+function limpar(t) { return String(t).replace(/</g, ''); }
+
+async function atualizar() {
+  let lista;
+  try {
+    const dados = await (await fetch(FIREBASE_URL + '/ranking.json')).json() || {};
+    lista = Object.values(dados).sort((a, b) => b.pontos - a.pontos); // mostra TODOS os participantes
+  } catch (e) { return; } // sem internet: mantem o que ja esta na tela
+
+  if (!lista.length) {
+    document.getElementById('podio').innerHTML = '';
+    document.getElementById('lista').innerHTML = '<p class="vazio">Ninguém jogou ainda. Seja o primeiro!</p>';
+    return;
+  }
+
+  const cores = ['#fcd34d', '#e5e7eb', '#fdba74'];
+  const ordemPodio = [1, 0, 2]; // mostra 2o, 1o, 3o (o 1o fica no meio e mais alto)
+  document.getElementById('podio').innerHTML = ordemPodio
+    .filter(i => lista[i])
+    .map(i => `<div class="lugar p${i + 1}">
+        ${trofeu(cores[i])}
+        <div class="nome">${limpar(lista[i].nome)}</div>
+        <div class="pts">${lista[i].pontos} pts</div>
+        <div class="degrau">${i + 1}º</div>
+      </div>`).join('');
+
+  document.getElementById('lista').innerHTML = lista.slice(3)
+    .map((p, i) => `<li><span>${i + 4}º ${limpar(p.nome)}</span><span>${p.pontos}</span></li>`).join('');
+}
+
+atualizar();
+setInterval(atualizar, 10000);
+</script>
+</body>
+</html>
